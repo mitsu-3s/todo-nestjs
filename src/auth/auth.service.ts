@@ -3,10 +3,9 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 import * as bcrypt from 'bcrypt'
-import { PrismaService } from 'src/prisma/prisma.service'
+import { PrismaService } from '../prisma/prisma.service'
 import { AuthDto } from './dto/auth.dto'
 import { Msg, Jwt } from './interfaces/auth.interface'
-import { use } from 'passport'
 
 @Injectable()
 export class AuthService {
@@ -42,14 +41,14 @@ export class AuthService {
                 email: dto.email,
             },
         })
-        if (!user) throw new ForbiddenException('Email or Password incorrect')
+        if (!user) throw new ForbiddenException('Email or password incorrect')
         const isValid = await bcrypt.compare(dto.password, user.hashedPassword)
         if (!isValid)
-            throw new ForbiddenException('Email or Password incorrect')
-        return this.genegateJwt(user.id, user.email)
+            throw new ForbiddenException('Email or password incorrect')
+        return this.generateJwt(user.id, user.email)
     }
 
-    async genegateJwt(userId: number, email: string): Promise<Jwt> {
+    async generateJwt(userId: number, email: string): Promise<Jwt> {
         const payload = {
             sub: userId,
             email,

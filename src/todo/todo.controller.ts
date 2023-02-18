@@ -43,7 +43,7 @@ export class TodoController {
     }
 
     @Patch(':id')
-    updateTaksById(
+    updateTaskById(
         @Req() req: Request,
         @Param('id', ParseIntPipe) taskId: number,
         @Body() dto: UpdateTaskDto
